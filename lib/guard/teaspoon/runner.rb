@@ -18,12 +18,21 @@ module Guard
       end
 
       def run_all(options = {})
-        @console.execute(@options.merge(options))
+        begin
+          @console.execute(@options.merge(options))
+        rescue Exception
+          STDOUT.print "Teaspoon-guard: ERROR running all, probably a js/coffeescript syntax error.\n"
+        end
       end
 
       def run(files = [], options = {})
         return false if files.empty?
-        @console.execute(@options.merge(options).merge(files: files))
+
+        begin
+          @console.execute(@options.merge(options).merge(files: files))
+        rescue Exception
+          STDOUT.print "Teaspoon-guard: ERROR running files #{files}.  Probably js/coffeescript syntax error.\n"
+        end
       end
 
       private
